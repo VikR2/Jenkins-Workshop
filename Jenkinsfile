@@ -11,26 +11,30 @@ pipeline {
         echo "${TEST_USER_PSW}"
       }
     }
-   stage('Testing') {
-        parallel {
-          stage('Java 8') {
-            agent { label 'jdk9' }
-            steps {
-              container('maven8') {
-                sh 'mvn -v'
-              }
-            }
+    stage('Testing') {
+      failFast true
+      parallel {
+        stage('Java 8') {
+          agent {
+            label 'jdk8'
           }
-          stage('Java 9') {
-            agent { label 'jdk8' }
-            steps {
-              container('maven9') {
-                sh 'mvn -v'
-              }
-            }
+          steps {
+            sh 'java -version'
+            sleep(time: 10, unit: 'SECONDS')
+          }
+        }
+        stage('Java 9') {
+          agent {
+            label 'jdk9'
+          }
+          steps {
+            sh 'java -version'
+            sleep(time: 20, unit: 'SECONDS')
           }
         }
       }
+    }
+  }
   environment {
     MY_NAME = 'Mary'
     TEST_USER = credentials('test-user')
