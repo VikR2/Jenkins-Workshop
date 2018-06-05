@@ -11,7 +11,7 @@ pipeline {
         echo "${TEST_USER_PSW}"
       }
     }
-    stage('Testing') {
+   stage('Testing') {
         parallel {
           stage('Java 8') {
             agent { label 'jdk9' }
